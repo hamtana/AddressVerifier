@@ -1,5 +1,7 @@
 package com.example.AddressVerifier.controller;
 
+import com.example.AddressVerifier.client.LinzFeatureCollection;
+import com.example.AddressVerifier.model.Address;
 import com.example.AddressVerifier.service.LinzAddressService;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -19,7 +21,7 @@ public class AddressController {
     }
 
     @GetMapping("/verify")
-    public ResponseEntity<Mono<String>> verify(
+    public ResponseEntity<Mono<Address>> verify(
             @RequestParam String address){
 
         return ResponseEntity.ok(

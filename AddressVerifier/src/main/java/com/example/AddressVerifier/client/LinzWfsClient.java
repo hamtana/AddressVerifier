@@ -26,7 +26,7 @@ public class LinzWfsClient {
      * @param cqlFilter
      * @return
      */
-    public Mono<String> queryByCql(String cqlFilter) {
+    public Mono<LinzFeatureCollection> queryByCql(String cqlFilter) {
         return webClient.get()
                 .uri(uriBuilder -> uriBuilder
                         .path(";key=" + apiKey+ "/wfs")                      // WFS endpoint
@@ -38,7 +38,7 @@ public class LinzWfsClient {
                         .queryParam("CQL_FILTER", cqlFilter)
                         .build())
                 .retrieve()
-                .bodyToMono(String.class);
+                .bodyToMono(LinzFeatureCollection.class);
     }
 
 

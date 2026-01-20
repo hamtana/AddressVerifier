@@ -1,6 +1,8 @@
 package com.example.AddressVerifier.service;
 
+import com.example.AddressVerifier.client.LinzFeatureCollection;
 import com.example.AddressVerifier.client.LinzWfsClient;
+import com.example.AddressVerifier.model.Address;
 import org.springframework.stereotype.Service;
 import reactor.core.publisher.Mono;
 
@@ -17,18 +19,22 @@ public class LinzAddressService {
 
     /**
      * Send the user entered material from the controller into the client
-     * @param address
+     * @param addressQuery
      * @return
      */
-    public Mono<String> verifyAddress(String address) {
+    public Mono<Address> verifyAddress(String addressQuery) {
+        String cql = "full_address ILIKE '" + addressQuery + "%'";
 
-        // Prevent SQL injection attacks
-        String safeAddress = address.replace("'", "''");
+        return client.queryByCql(cql)
+                .map(collection -> {
+                    if (collection.getFeatures().isEmpty()) return null;
 
-        String cql = String.format("full_address ILIKE '%s%%'", safeAddress);
-
-        return client.queryByCql(cql);
+                    var props = collection.getFeatures().get(0).getProperties();
+                    return new Address(
+                            (String) props.get("full_address"),
+                            (String) props.get("suburb_locality"),
+                            (String) props.get("town_city")
+                    );
+                });
     }
-
-
 }
