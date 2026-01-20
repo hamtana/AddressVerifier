@@ -33,6 +33,7 @@ public class LinzWfsClient {
                         .queryParam("service", "WFS")
                         .queryParam("version", "2.0.0")
                         .queryParam("request", "GetFeature")
+                        .queryParam("propertyName", "full_address,suburb_locality,town_city")
                         .queryParam("typeNames", layer)    // your layer
                         .queryParam("outputFormat", "json")
                         .queryParam("CQL_FILTER", cqlFilter)
