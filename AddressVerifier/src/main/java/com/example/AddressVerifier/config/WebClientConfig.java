@@ -11,7 +11,10 @@ public class WebClientConfig {
     @Bean
     WebClient linzWebClient(
 
-            @Value("${base.api.base-url") String baseUrl){
+            @Value("${linz.api.base-url}") String baseUrl){
+
+            System.out.println("LINZ URL: " + baseUrl);
+
             return WebClient.builder()
                     .baseUrl(baseUrl)
                     .build();

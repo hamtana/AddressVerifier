@@ -3,6 +3,7 @@ package com.example.AddressVerifier.client;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Component;
 import org.springframework.web.reactive.function.client.WebClient;
+import reactor.core.publisher.Mono;
 
 @Component
 public class LinzWfsClient {
@@ -25,21 +26,21 @@ public class LinzWfsClient {
      * @param cqlFilter
      * @return
      */
-    public String queryByCql(String cqlFilter){
+    public Mono<String> queryByCql(String cqlFilter) {
         return webClient.get()
                 .uri(uriBuilder -> uriBuilder
-                        .path(";key=" + apiKey + "/wfs")
+                        .path(";key=" + apiKey+ "/wfs")                      // WFS endpoint
                         .queryParam("service", "WFS")
                         .queryParam("version", "2.0.0")
                         .queryParam("request", "GetFeature")
+                        .queryParam("typeNames", layer)    // your layer
                         .queryParam("outputFormat", "json")
                         .queryParam("CQL_FILTER", cqlFilter)
                         .build())
                 .retrieve()
-                .bodyToMono(String.class)
-                .block();
-
+                .bodyToMono(String.class);
     }
+
 
 
 }
