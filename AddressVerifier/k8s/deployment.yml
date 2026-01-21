@@ -1,0 +1,37 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: address-verifier
+spec:
+  replicas: 3  # number of pods for load balancing
+  selector:
+    matchLabels:
+      app: address-verifier
+  template:
+    metadata:
+      labels:
+        app: address-verifier
+    spec:
+      containers:
+        - name: address-verifier
+          image: hamish27/address-verifier:latest
+          ports:
+            - containerPort: 8085
+          env:
+            - name: LINZ_API_KEY
+              valueFrom:
+                secretKeyRef:
+                  name: linz-api-key
+                  key: api-key
+          livenessProbe:
+            httpGet:
+              path: /actuator/health
+              port: 8085
+            initialDelaySeconds: 30
+            periodSeconds: 10
+          readinessProbe:
+            httpGet:
+              path: /actuator/health
+              port: 8085
+            initialDelaySeconds: 10
+            periodSeconds: 5

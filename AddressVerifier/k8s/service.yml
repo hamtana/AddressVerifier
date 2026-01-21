@@ -1,0 +1,11 @@
+apiVersion: v1
+kind: Service
+metadata:
+  name: address-verifier
+spec:
+  type: LoadBalancer       # or NodePort for local testing
+  selector:
+    app: address-verifier
+  ports:
+    - port: 8085
+      targetPort: 8085
