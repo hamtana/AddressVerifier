@@ -76,6 +76,8 @@ web_modules/
 .cache
 .parcel-cache
 
+.env
+
 # Next.js build output
 .next
 out
