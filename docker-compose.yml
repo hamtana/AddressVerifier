@@ -1,9 +1,9 @@
 services:
   address-verifier:
-    image: address-verifier
     build:
       context: .
       dockerfile: AddressVerifier/Dockerfile
+    image: address-verifier
     ports:
       - "8085:8085"
     environment:
