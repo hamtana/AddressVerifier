@@ -1,10 +1,10 @@
 services:
   address-verifier:
-    container_name: address-verifier
+    image: address-verifier
     build:
       context: .
       dockerfile: AddressVerifier/Dockerfile
     ports:
       - "8085:8085"
-	environment:
-		LINZ_API_LEY: ${LINZ_API_KEY}
+    environment:
+      LINZ_API_KEY: ${LINZ_API_KEY}
