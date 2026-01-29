@@ -1,0 +1,119 @@
+openapi: 3.0.3
+info:
+  title: AddressVerifier API
+  version: 1.0.0
+  description: |
+    An API to verify addresses using LINZ (DataLinz NZ) address data.
+
+    This API performs a case-insensitive prefix search on addresses and
+    returns matching results in structured JSON format.
+  contact:
+    name: Hamish Phillips
+    url: 'https://address-verifier.phillipsmusictech.co.nz'
+    email: hamish@phillipsmusictech.co.nz
+servers:
+  - url: 'https://address-verifier.phillipsmusictech.co.nz'
+    description: Production server
+tags:
+  - name: address
+    description: Address verification endpoints
+security:
+  - ApiKeyAuth: []
+paths:
+  /addresses/verify:
+    get:
+      tags:
+        - address
+      summary: Verify an address
+      operationId: verifyAddress
+      description: "Verifies an address using LINZ address data.\n\n- Performs a case-insensitive prefix match on the full address\n- Returns one or more matching addresses\n- Returns **404** if no matching addresses are found\n\n\U0001F510 **Authentication required**\nAn API key must be provided in the `X-API-KEY` request header.\n"
+      parameters:
+        - name: address
+          in: query
+          required: true
+          description: |
+            Address string to verify.
+
+            The search is case-insensitive and matches the beginning of the full address.
+          schema:
+            type: string
+            minLength: 3
+            example: 123 George Street
+      responses:
+        '200':
+          description: Address(es) found
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/Address'
+        '401':
+          description: Missing or invalid API key
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+        '404':
+          description: Address not found
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+        '500':
+          description: Internal server error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+components:
+  securitySchemes:
+    ApiKeyAuth:
+      type: apiKey
+      in: header
+      name: X-API-KEY
+      description: |
+        API key required to access this API.
+        Provide the key in the `X-API-KEY` request header.
+  schemas:
+    Address:
+      type: object
+      description: |
+        An address model returned from LINZ address data.
+
+        Provides the full address as well as individual components.
+      properties:
+        fullAddress:
+          type: string
+          description: Full formatted address
+          example: '123 George Street, Central Dunedin, Dunedin 9016'
+        streetAddress:
+          type: string
+          description: Street address component
+          example: 123 George Street
+        suburb:
+          type: string
+          description: Suburb or locality
+          example: Central Dunedin
+        town:
+          type: string
+          description: Town or city
+          example: Dunedin
+    ErrorResponse:
+      type: object
+      description: Error response payload
+      properties:
+        message:
+          type: string
+          example: Address not found
+        timestamp:
+          type: string
+          format: date-time
+          example: '2026-01-28T09:42:00Z'
+        status:
+          type: integer
+          example: 404
+      required:
+        - message
+        - status
+
