@@ -9,6 +9,7 @@ import org.springframework.stereotype.Service;
 import reactor.core.publisher.Mono;
 
 import java.util.List;
+import java.util.Objects;
 import java.util.concurrent.TimeUnit;
 import java.util.stream.Collectors;
 
@@ -35,6 +36,12 @@ public class LinzAddressService {
         return Mono.fromFuture(
                 cache.get(addressQuery, (key, executor) -> {
                     // must return CompletableFuture<List<Address>>
+
+                    if(Objects.equals(key, "")){
+                        //prevent further execution, and pass an error
+                        throw new AddressNotFoundException("No addresses found for: " + key);
+                    }
+
                     return client.queryByCql("full_address ILIKE '" + key + "%'")
                             .map(collection -> {
                                 List<Address> addresses = collection.getFeatures().stream()
