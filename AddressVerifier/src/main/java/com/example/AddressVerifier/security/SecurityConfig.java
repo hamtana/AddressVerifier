@@ -21,7 +21,6 @@ public class SecurityConfig {
 
 
         return http
-                .csrf(ServerHttpSecurity.CsrfSpec::disable) // if you don't need CSRF
                 .httpBasic(ServerHttpSecurity.HttpBasicSpec::disable) // Disable default HTTP Basic
                 .formLogin(ServerHttpSecurity.FormLoginSpec::disable) // Disable default form login
                 .addFilterAt(authenticationWebFilter, SecurityWebFiltersOrder.AUTHENTICATION)
