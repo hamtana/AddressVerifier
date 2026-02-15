@@ -38,7 +38,7 @@ jobs:
         environment_name: ${{ secrets.EB_ENVIRONMENT_NAME }}
         version_label: ${{ github.sha }}
         region: ${{ secrets.AWS_REGION }}
-        deployment_package: build/libs/AddressVerifier.jar
+        deployment_package: AddressVerifier/build/libs/AddressVerifier.jar
     
     - name: Deployment Success
       run: |
