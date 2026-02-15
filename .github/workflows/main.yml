@@ -3,7 +3,7 @@ name: Deploy to AWS Elastic Beanstalk
 on:
   push:
     branches:
-      - main
+      - deploy-to-aws-eb
   workflow_dispatch:
 
 jobs:
@@ -12,13 +12,13 @@ jobs:
     
     steps:
     - name: Checkout code
-      uses: actions/checkout@v3
+      uses: actions/checkout@v4
     
     - name: Set up JDK 17
-      uses: actions/setup-java@v3
+      uses: actions/setup-java@v4
       with:
         java-version: '17'
-        distribution: 'corretto'
+        distribution: 'temurin'
         cache: 'maven'
     
     # - name: Build with Maven
@@ -27,19 +27,6 @@ jobs:
     - name: Build with Gradle
       run: ./gradlew clean build 
     
-    - name: Get artifact info
-      id: artifact
-      run: |
-        echo "JAR_FILE=$(ls target/*.jar | head -n 1)" >> $GITHUB_OUTPUT
-        echo "VERSION=$(date +%Y%m%d-%H%M%S)-${GITHUB_SHA::7}" >> $GITHUB_OUTPUT
-    
-    - name: Generate deployment package
-      run: |
-        mkdir -p deploy
-        cp ${{ steps.artifact.outputs.JAR_FILE }} deploy/application.jar
-        cp Procfile deploy/ || echo "web: java -jar application.jar" > deploy/Procfile
-        if [ -d ".ebextensions" ]; then cp -r .ebextensions deploy/; fi
-        cd deploy && zip -r ../deploy.zip .
     
     - name: Deploy to Elastic Beanstalk
       uses: einaregilsson/beanstalk-deploy@v21
