@@ -19,7 +19,7 @@ jobs:
       with:
         java-version: '17'
         distribution: 'temurin'
-        cache: 'maven'
+        cache: 'gradle'
     
     # - name: Build with Maven
     #   run: mvn clean package -DskipTests
@@ -35,13 +35,11 @@ jobs:
         aws_secret_key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
         application_name: ${{ secrets.EB_APPLICATION_NAME }}
         environment_name: ${{ secrets.EB_ENVIRONMENT_NAME }}
-        version_label: ${{ steps.artifact.outputs.VERSION }}
+        version_label: ${{ github.sha }}
         region: ${{ secrets.AWS_REGION }}
-        deployment_package: deploy.zip
-        wait_for_deployment: true
-        wait_for_environment_recovery: 300
+        deployment_package: build/libs/AddressVerifier.jar
     
     - name: Deployment Success
       run: |
         echo "✅ Application deployed successfully!"
-        echo "Version: ${{ steps.artifact.outputs.VERSION }}"
+        echo "Version: ${{ github.sha }}"
