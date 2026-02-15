@@ -25,6 +25,7 @@ jobs:
     #   run: mvn clean package -DskipTests
     
     - name: Build with Gradle
+      working-directory: ./AddressVerifier
       run: ./gradlew clean build 
     
     
