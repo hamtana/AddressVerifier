@@ -74,8 +74,21 @@ src/
 └── main/
     └── java/
         └── com/example/AddressVerifier/
+            ├── client/
+            │   └── LinzFeatureCollection
+                └── LinzWfsClient
+            ├── config/
+            │   └── ApiKeyProperties
+                └── CacheConfig
+                └── WebClientConfig
+            ├── security/
+            │   └── KeyAuthenticationConverter
+                └── KeyAuthenticationManager
+                └── KeyAuthenticationToken
+                └── SecurityConfig
             ├── controller/
-            │   └── AddressController.java   # REST endpoint definitions
+            │   └── AddressController.java   # API endpoint definitions
+                └── ResourceController.java  # Home endpoint definition
             ├── service/
             │   └── LinzAddressService.java  # Business logic & LINZ API calls
             ├── model/
