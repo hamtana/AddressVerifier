@@ -121,7 +121,7 @@ curl -X GET "https://address-verifier.phillipsmusictech.co.nz/addresses/verify?a
 
 ### OpenAPI Specification
 
-The full OpenAPI 3.0.3 specification can be imported into tools like [Swagger UI](https://swagger.io/tools/swagger-ui/) or [Postman](https://www.postman.com/) for interactive exploration.
+The API specification can be found [here](/Documentation/AddressVerifier.yml)
 
 ---
 
