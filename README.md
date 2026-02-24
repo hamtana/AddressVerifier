@@ -2,11 +2,15 @@
 
 A lightweight Spring Boot API that verifies New Zealand addresses against the **LINZ (Land Information New Zealand)** dataset using reactive programming with Project Reactor.
 
+**Contact:** [hamish@phillipsmusictech.co.nz](mailto:hamish@phillipsmusictech.co.nz)
+**Production URL:** [https://address-verifier.phillipsmusictech.co.nz](https://address-verifier.phillipsmusictech.co.nz)
+
 ---
 
 ## 🚀 Features
 
 - Verify addresses against the official LINZ address dataset
+- Case-insensitive prefix search across all NZ addresses
 - Reactive, non-blocking architecture using `Mono` from Project Reactor
 - Clean API with meaningful HTTP response codes
 - Graceful error handling for unrecognised addresses
@@ -27,29 +31,48 @@ A lightweight Spring Boot API that verifies New Zealand addresses against the **
 
 ## 📡 API Reference
 
+**Base URL:** `https://address-verifier.phillipsmusictech.co.nz`
+
+### Authentication
+
+All endpoints require an API key passed in the request header.
+
+| Header | Description |
+|---|---|
+| `X-Api-Key` | Your API key — required on every request |
+
+Requests without a valid key will receive a `401 Unauthorized` response.
+
+---
+
 ### Verify an Address
 
 ```
-GET /api/addresses/verify?address={address}
+GET /addresses/verify?address={address}
 ```
+
+Performs a **case-insensitive prefix search** against LINZ address data, returning all matching addresses.
 
 **Query Parameters**
 
-| Parameter | Type | Required | Description |
-|---|---|---|---|
-| `address` | `string` | ✅ | The address string to verify |
+| Parameter | Type | Required | Min Length | Description |
+|---|---|---|---|---|
+| `address` | `string` | ✅ | 3 characters | The address string to search for |
 
 **Responses**
 
 | Status Code | Description |
 |---|---|
-| `200 OK` | Address was found — returns a list of matching `Address` objects |
-| `404 Not Found` | Address could not be found in the LINZ dataset |
+| `200 OK` | One or more matching addresses found |
+| `401 Unauthorized` | Missing or invalid API key |
+| `404 Not Found` | No matching address found in the LINZ dataset |
+| `500 Internal Server Error` | An unexpected server error occurred |
 
 **Example Request**
 
 ```bash
-curl -X GET "http://localhost:8080/api/addresses/verify?address=1+Queen+Street+Auckland"
+curl -X GET "https://address-verifier.phillipsmusictech.co.nz/addresses/verify?address=123+George+Street" \
+  -H "X-Api-Key: your_api_key_here"
 ```
 
 **Example Response (200 OK)**
@@ -57,13 +80,48 @@ curl -X GET "http://localhost:8080/api/addresses/verify?address=1+Queen+Street+A
 ```json
 [
   {
-    "fullAddress": "1 Queen Street, Auckland CBD, Auckland",
-    "streetAddress": "1 Queen Street",
-    "suburb": "Auckland CBD",
-    "town": "Auckland"
+    "fullAddress": "123 George Street, Central Dunedin, Dunedin 9016",
+    "streetAddress": "123 George Street",
+    "suburb": "Central Dunedin",
+    "town": "Dunedin"
   }
 ]
 ```
+
+**Example Error Response (401 / 404 / 500)**
+
+```json
+{
+  "message": "Address not found",
+  "status": 404,
+  "timestamp": "2026-01-28T09:42:00Z"
+}
+```
+
+---
+
+### Address Schema
+
+| Field | Type | Description | Example |
+|---|---|---|---|
+| `fullAddress` | `string` | Full formatted address | `123 George Street, Central Dunedin, Dunedin 9016` |
+| `streetAddress` | `string` | Street address component | `123 George Street` |
+| `suburb` | `string` | Suburb or locality | `Central Dunedin` |
+| `town` | `string` | Town or city | `Dunedin` |
+
+### Error Response Schema
+
+| Field | Type | Required | Description | Example |
+|---|---|---|---|---|
+| `message` | `string` | ✅ | Human-readable error message | `Address not found` |
+| `status` | `integer` | ✅ | HTTP status code | `404` |
+| `timestamp` | `string` | ❌ | ISO 8601 datetime of the error | `2026-01-28T09:42:00Z` |
+
+---
+
+### OpenAPI Specification
+
+The full OpenAPI 3.0.3 specification can be imported into tools like [Swagger UI](https://swagger.io/tools/swagger-ui/) or [Postman](https://www.postman.com/) for interactive exploration.
 
 ---
 
@@ -96,7 +154,6 @@ src/
             └── exception/
                 └── AddressNotFoundException.java  # Custom exception
 ```
-
 ---
 
 ## ⚙️ Getting Started
@@ -118,7 +175,7 @@ ADMIN_PASSWORD=for accessing admin options (not currently implemented)
 
 ```
 
-VALID_API_KEYS is used to validate the user if hosting the service on public server.
+VALID_API_KEYS is used to validate the user if hosting the service on a public server.
 
 ### Running the Application
 
@@ -127,7 +184,7 @@ VALID_API_KEYS is used to validate the user if hosting the service on public ser
 git clone https://github.com/your-username/AddressVerifier.git
 cd AddressVerifier
 
-# Build and run with Maven
+# Build and run with Gradle
 ./gradlew bootRun
 ```
 
@@ -137,14 +194,13 @@ The API will be available at `http://localhost:8080`.
 
 ## 🔍 How It Works
 
-1. A `GET` request is made to `/api/addresses/verify` with an address query parameter.
-2. The `AddressController` delegates to `LinzAddressService`, which queries the LINZ dataset reactively.
+1. A `GET` request is made to `/addresses/verify` with an address query parameter and a valid `X-Api-Key` header.
+2. The `AddressController` delegates to `LinzAddressService`, which performs a case-insensitive prefix search against the LINZ dataset reactively.
 3. If one or more matching addresses are found, they are returned as a list with a `200 OK` response.
-4. If no match is found, an `AddressNotFoundException` is thrown and caught, returning a clean `404 Not Found`.
+4. If no match is found, an `AddressNotFoundException` is thrown and caught, returning a clean `404 Not Found` with a structured error body.
 
 ---
 
 ## 📄 License
 
 This project is licensed under the [GNU General Public License v3.0](COPYING.txt)
-
