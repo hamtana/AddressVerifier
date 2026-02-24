@@ -129,4 +129,5 @@ The API will be available at `http://localhost:8080`.
 
 ## 📄 License
 
-This project is licensed under the [MIT License](LICENSE).
+This project is licensed under the [GNU General Public License v3.0](COPYING.txt)
+
