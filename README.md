@@ -1,6 +1,6 @@
 # 📍 AddressVerifier
 
-A lightweight Spring Boot REST API that verifies New Zealand addresses against the **LINZ (Land Information New Zealand)** dataset using reactive programming with Project Reactor.
+A lightweight Spring Boot API that verifies New Zealand addresses against the **LINZ (Land Information New Zealand)** dataset using reactive programming with Project Reactor.
 
 ---
 
@@ -8,7 +8,7 @@ A lightweight Spring Boot REST API that verifies New Zealand addresses against t
 
 - Verify addresses against the official LINZ address dataset
 - Reactive, non-blocking architecture using `Mono` from Project Reactor
-- Clean RESTful API with meaningful HTTP response codes
+- Clean API with meaningful HTTP response codes
 - Graceful error handling for unrecognised addresses
 
 ---
@@ -109,12 +109,16 @@ src/
 
 ### Configuration
 
-Add your LINZ API key to `src/main/resources/application.properties`:
+Add the following to a .env file.
 
 ```properties
-linz.api.key=your_api_key_here
-linz.api.base-url=https://data.linz.govt.nz
+LINZ_API_KEY=your-linz-api-key
+VALID_API_KEYS=a set of valid api keys for accessing the service, seperated by commas
+ADMIN_PASSWORD=for accessing admin options (not currently implemented)
+
 ```
+
+VALID_API_KEYS is used to validate the user if hosting the service on public server.
 
 ### Running the Application
 
