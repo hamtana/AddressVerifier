@@ -71,10 +71,10 @@ components:
     ApiKeyAuth:
       type: apiKey
       in: header
-      name: X-API-KEY
+      name: X-Api-Key
       description: |
         API key required to access this API.
-        Provide the key in the `X-API-KEY` request header.
+        Provide the key in the `X-Api-Key` request header.
   schemas:
     Address:
       type: object
