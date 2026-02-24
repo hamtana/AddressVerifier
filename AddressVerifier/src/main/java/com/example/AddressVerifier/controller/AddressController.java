@@ -21,6 +21,9 @@ public class AddressController {
 
     @GetMapping("/verify")
     public Mono<ResponseEntity<List<Address>>> verify(@RequestParam String address) {
+
+        System.out.println(address);
+
         return service.verifyAddress(address)
                 .map(ResponseEntity::ok) // wraps the Address in 200 OK
                 .onErrorResume(AddressNotFoundException.class,
