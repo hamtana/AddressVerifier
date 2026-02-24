@@ -200,7 +200,3 @@ The API will be available at `http://localhost:8080`.
 4. If no match is found, an `AddressNotFoundException` is thrown and caught, returning a clean `404 Not Found` with a structured error body.
 
 ---
-
-## 📄 License
-
-This project is licensed under the [GNU General Public License v3.0](COPYING.txt)
