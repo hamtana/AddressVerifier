@@ -26,6 +26,7 @@ public class SecurityConfig {
                 .addFilterAt(authenticationWebFilter, SecurityWebFiltersOrder.AUTHENTICATION)
                 .authorizeExchange(exchanges -> exchanges
                         .pathMatchers("/home").permitAll()
+                        .pathMatchers("/actuator/health").permitAll()
                         .anyExchange().authenticated()
                 )
                 .build();
