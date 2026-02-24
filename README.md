@@ -111,7 +111,7 @@ git clone https://github.com/your-username/AddressVerifier.git
 cd AddressVerifier
 
 # Build and run with Maven
-./mvnw spring-boot:run
+./gradlew bootRun
 ```
 
 The API will be available at `http://localhost:8080`.
