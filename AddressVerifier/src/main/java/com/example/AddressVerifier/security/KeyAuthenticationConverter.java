@@ -34,7 +34,7 @@ import java.util.stream.Collectors;
 @Component
 public class KeyAuthenticationConverter implements ServerAuthenticationConverter {
 
-    private static final String API_KEY_HEADER_NAME = "API_KEY";
+    private static final String API_KEY_HEADER_NAME = "X-Api-Key";
     private final Set<String> validKeys;
 
     public KeyAuthenticationConverter(
