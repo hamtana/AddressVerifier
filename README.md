@@ -121,7 +121,7 @@ curl -X GET "https://address-verifier.phillipsmusictech.co.nz/addresses/verify?a
 
 ### OpenAPI Specification
 
-The API specification can be found [here](/Documentation/AddressVerifier.yml)
+The API specification can be found [here](/Documentation/AddressVerifier.yaml)
 
 ---
 
