@@ -1,6 +1,6 @@
 # 📍 AddressVerifier
 
-A lightweight Spring Boot API that verifies New Zealand addresses against the **LINZ (Land Information New Zealand)** dataset using reactive programming with Project Reactor.
+A lightweight Spring Boot API that verifies New Zealand addresses against the **LINZ (Land Information New Zealand)** dataset.
 
 **Contact:** [hamish@phillipsmusictech.co.nz](mailto:hamish@phillipsmusictech.co.nz)
 **Production URL:** [https://address-verifier.phillipsmusictech.co.nz](https://address-verifier.phillipsmusictech.co.nz)
