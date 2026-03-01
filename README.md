@@ -23,7 +23,7 @@ A lightweight Spring Boot API that verifies New Zealand addresses against the **
 |---|---|
 | Java | Core language |
 | Spring Boot | Application framework |
-| Spring WebFlux | Reactive REST API |
+| Spring WebFlux | Reactive API |
 | Project Reactor | Reactive streams (`Mono`) |
 | LINZ Data Service | Address verification source |
 
